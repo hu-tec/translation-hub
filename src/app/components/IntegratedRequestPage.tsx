@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from "motion/react";
 import { 
   Send, UserPlus, Calculator, FileText, Check, 
   ArrowRight, Shield, Globe, Award, Sparkles,
-  Phone, Mail, Clock, MapPin, Search, ChevronRight
+  Phone, Mail, Clock, MapPin, Search, ChevronRight, BookOpen, GraduationCap, MessageSquare
 } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -287,203 +287,215 @@ export function IntegratedRequestPage() {
               key={activeTab + "-form"}
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
-              className="bg-white rounded-[40px] p-8 md:p-12 shadow-sm border border-gray-100"
+              className="bg-white rounded-[40px] p-8 md:p-10 shadow-sm border border-gray-100"
             >
-              <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
-                {activeTab === 'expert' ? (
-                  <>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <div className="space-y-2">
-                        <label className="text-xs font-black text-gray-900 ml-1">성명 <span className="text-red-500">*</span></label>
-                        <input {...register("name", { required: true })} placeholder="성함을 입력하세요" className="w-full bg-gray-50 border-none rounded-2xl px-5 py-3.5 focus:ring-2 focus:ring-[#4A1D96] transition-all font-medium placeholder:text-gray-300" />
-                      </div>
-                      <div className="space-y-2">
-                        <label className="text-xs font-black text-gray-900 ml-1">생년월일 <span className="text-red-500">*</span></label>
-                        <input {...register("dob", { required: true })} type="date" className="w-full bg-gray-50 border-none rounded-2xl px-5 py-3.5 focus:ring-2 focus:ring-[#4A1D96] transition-all font-medium placeholder:text-gray-300 text-gray-600" />
-                      </div>
+              <form onSubmit={handleSubmit(onSubmit)} className="space-y-10">
+                
+                {/* 1. 신청 구분 Box */}
+                <div className="p-6 rounded-2xl border border-gray-100 bg-gray-50/50 flex flex-col xl:flex-row xl:items-center gap-6">
+                  <div className="flex items-center gap-2 text-[#4A1D96] font-extrabold shrink-0">
+                    <div className="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center">
+                      <div className="w-3 h-3 rounded-full bg-[#4A1D96] ring-4 ring-purple-200" />
                     </div>
-
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <div className="space-y-2">
-                        <label className="text-xs font-black text-gray-900 ml-1">연락처 <span className="text-red-500">*</span></label>
-                        <input {...register("phone", { required: true })} placeholder="010-0000-0000" className="w-full bg-gray-50 border-none rounded-2xl px-5 py-3.5 focus:ring-2 focus:ring-[#4A1D96] transition-all font-medium placeholder:text-gray-300" />
-                      </div>
-                      <div className="space-y-2">
-                        <label className="text-xs font-black text-gray-900 ml-1">이메일 <span className="text-red-500">*</span></label>
-                        <input {...register("email", { required: true })} placeholder="example@hutechc.com" className="w-full bg-gray-50 border-none rounded-2xl px-5 py-3.5 focus:ring-2 focus:ring-[#4A1D96] transition-all font-medium placeholder:text-gray-300" />
-                      </div>
-                    </div>
-
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <div className="space-y-2">
-                        <label className="text-xs font-black text-gray-900 ml-1">분류 <span className="text-red-500">*</span></label>
-                        <select {...register("classification", { required: true })} className="w-full bg-gray-50 border-none rounded-2xl px-5 py-3.5 focus:ring-2 focus:ring-[#4A1D96] transition-all font-medium text-gray-600 appearance-none">
-                          <option value="SST">SST (Speech to Speech Translation)</option>
-                          <option value="TTS">TTS (Text to Speech)</option>
-                          <option value="STS">STS (Speech to Text)</option>
-                          <option value="기타">기타</option>
-                        </select>
-                      </div>
-                      <div className="space-y-2">
-                        <label className="text-xs font-black text-gray-900 ml-1">급수 <span className="text-red-500">*</span></label>
-                        <select {...register("grade", { required: true })} className="w-full bg-gray-50 border-none rounded-2xl px-5 py-3.5 focus:ring-2 focus:ring-[#4A1D96] transition-all font-medium text-gray-600 appearance-none">
-                          <option value="1급">1급</option>
-                          <option value="2급">2급</option>
-                          <option value="3급">3급</option>
-                          <option value="무급">해당없음</option>
-                        </select>
-                      </div>
-                    </div>
-
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <div className="space-y-2">
-                        <label className="text-xs font-black text-gray-900 ml-1">최종학력</label>
-                        <select {...register("education")} className="w-full bg-gray-50 border-none rounded-2xl px-5 py-3.5 focus:ring-2 focus:ring-[#4A1D96] transition-all font-medium text-gray-600 appearance-none">
-                          <option value="대졸">대학교 졸업</option>
-                          <option value="대학원졸">대학원 졸업</option>
-                          <option value="초대졸">초대졸</option>
-                          <option value="고졸">고졸</option>
-                          <option value="중졸">중졸</option>
-                        </select>
-                      </div>
-                      <div className="space-y-2">
-                        <label className="text-xs font-black text-gray-900 ml-1">경력</label>
-                        <select {...register("career")} className="w-full bg-gray-50 border-none rounded-2xl px-5 py-3.5 focus:ring-2 focus:ring-[#4A1D96] transition-all font-medium text-gray-600 appearance-none">
-                          <option value="신입">신입</option>
-                          <option value="1~3년">1~3년</option>
-                          <option value="3~5년">3~5년</option>
-                          <option value="5년 이상">5년 이상</option>
-                        </select>
-                      </div>
-                    </div>
-
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <div className="space-y-2">
-                        <label className="text-xs font-black text-gray-900 ml-1">현재 직업</label>
-                        <select {...register("occupation")} className="w-full bg-gray-50 border-none rounded-2xl px-5 py-3.5 focus:ring-2 focus:ring-[#4A1D96] transition-all font-medium text-gray-600 appearance-none">
-                          <option value="프리랜서">프리랜서</option>
-                          <option value="직장인">직장인</option>
-                          <option value="대학생">대학생</option>
-                          <option value="취준생">취준생</option>
-                          <option value="기타">기타</option>
-                        </select>
-                      </div>
-                      <div className="space-y-2">
-                        <label className="text-xs font-black text-gray-900 ml-1">관심영역</label>
-                        <select {...register("interest")} className="w-full bg-gray-50 border-none rounded-2xl px-5 py-3.5 focus:ring-2 focus:ring-[#4A1D96] transition-all font-medium text-gray-600 appearance-none">
-                          <option value="스포츠">스포츠</option>
-                          <option value="뉴스">뉴스</option>
-                          <option value="예능">예능</option>
-                          <option value="드라마">드라마</option>
-                          <option value="교양">교양</option>
-                          <option value="다큐">다큐</option>
-                        </select>
-                      </div>
-                    </div>
-
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <div className="space-y-2">
-                        <label className="text-xs font-black text-gray-900 ml-1">이력서 첨부</label>
-                        <div className="relative">
-                          <input type="file" className="sr-only" id="resume" />
-                          <label htmlFor="resume" className="w-full flex items-center gap-3 bg-gray-50 border-2 border-dashed border-gray-200 rounded-2xl px-5 py-3.5 cursor-pointer hover:border-[#4A1D96]/30 transition-all">
-                            <FileText className="w-4 h-4 text-gray-400" />
-                            <span className="text-xs text-gray-400 font-bold">파일 선택 (PDF, Word)</span>
-                          </label>
-                        </div>
-                      </div>
-                      <div className="space-y-2">
-                        <label className="text-xs font-black text-gray-900 ml-1">자기소개서 첨부</label>
-                        <div className="relative">
-                          <input type="file" className="sr-only" id="intro" />
-                          <label htmlFor="intro" className="w-full flex items-center gap-3 bg-gray-50 border-2 border-dashed border-gray-200 rounded-2xl px-5 py-3.5 cursor-pointer hover:border-[#4A1D96]/30 transition-all">
-                            <FileText className="w-4 h-4 text-gray-400" />
-                            <span className="text-xs text-gray-400 font-bold">파일 선택 (PDF, Word)</span>
-                          </label>
-                        </div>
-                      </div>
-                    </div>
-                  </>
-                ) : (
-                  <>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                      <div className="space-y-2">
-                        <label className="text-sm font-black text-gray-900 ml-1">성함/담당자 명</label>
+                    <span className="text-[17px]">신청 구분</span>
+                  </div>
+                  <div className="flex flex-wrap gap-4 xl:ml-4">
+                    {["수업신청", "레벨테스트", "설명회신청", "TIP신청"].map((type, idx) => (
+                      <label key={type} className="flex items-center gap-2.5 cursor-pointer group">
                         <input 
-                          {...register("name", { required: true })}
-                          placeholder="홍길동"
-                          className="w-full bg-gray-50 border-none rounded-2xl px-6 py-4 focus:ring-2 focus:ring-[#4A1D96] transition-all font-medium placeholder:text-gray-300"
+                          type="checkbox" 
+                          defaultChecked={idx === 0}
+                          className="w-5 h-5 text-[#4A1D96] rounded border-gray-300 focus:ring-[#4A1D96] transition-colors" 
                         />
-                      </div>
-                      <div className="space-y-2">
-                        <label className="text-sm font-black text-gray-900 ml-1">연락처/이메일</label>
-                        <input 
-                          {...register("contact", { required: true })}
-                          placeholder="010-0000-0000"
-                          className="w-full bg-gray-50 border-none rounded-2xl px-6 py-4 focus:ring-2 focus:ring-[#4A1D96] transition-all font-medium placeholder:text-gray-300"
-                        />
-                      </div>
-                    </div>
-
-                    <div className="space-y-2">
-                      <label className="text-sm font-black text-gray-900 ml-1">
-                        서비스 카테고리
+                        <span className="text-[15px] font-bold text-gray-700 group-hover:text-gray-900 transition-colors">{type}</span>
                       </label>
-                      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                        {["산업별", "생활영역", "영상/미디어", "전문영역", "기타"].map((cat) => (
-                          <label key={cat} className="relative cursor-pointer group">
-                            <input 
-                              type="radio" 
-                              name="category" 
-                              value={cat} 
-                              className="peer sr-only"
-                              defaultChecked={cat === "산업별"}
-                            />
-                            <div className="p-4 rounded-xl border border-gray-100 text-center font-bold text-xs text-gray-500 peer-checked:bg-[#4A1D96] peer-checked:text-white peer-checked:border-[#4A1D96] group-hover:border-[#4A1D96]/30 transition-all">
-                              {cat}
-                            </div>
-                          </label>
-                        ))}
-                      </div>
-                    </div>
-
-                    <div className="space-y-2">
-                      <label className="text-sm font-black text-gray-900 ml-1">상세 문의 내용</label>
-                      <textarea 
-                        {...register("message", { required: true })}
-                        rows={6}
-                        placeholder="번역 대상 언어, 희망 납기일, 프로젝트 규모 등을 상세히 적어주시면 더 정확한 상담이 가능합니다."
-                        className="w-full bg-gray-50 border-none rounded-2xl px-6 py-4 focus:ring-2 focus:ring-[#4A1D96] transition-all font-medium placeholder:text-gray-300 resize-none"
-                      />
-                    </div>
-                  </>
-                )}
-
-                <div className="p-6 bg-purple-50/50 rounded-2xl border border-purple-100">
-                  <label className="flex items-start gap-4 cursor-pointer group">
-                    <input type="checkbox" required className="mt-1 w-4 h-4 rounded border-gray-300 text-[#4A1D96] focus:ring-[#4A1D96]" />
-                    <span className="text-[13px] text-gray-600 font-medium leading-relaxed group-hover:text-gray-900 transition-colors">
-                      [필수] 개인정보 수집 및 이용에 동의합니다. (문의 처리 및 서비스 안내 목적)
-                    </span>
-                  </label>
+                    ))}
+                  </div>
                 </div>
 
-                <button 
-                  type="submit"
-                  disabled={isSubmitting}
-                  className="w-full bg-[#4A1D96] text-white py-5 rounded-2xl font-black text-lg hover:bg-[#3d187b] transition-all flex items-center justify-center gap-3 shadow-xl shadow-purple-200 disabled:opacity-50"
-                >
-                  {isSubmitting ? (
-                    <span className="flex items-center gap-2">
-                      <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                      전송 중...
-                    </span>
-                  ) : (
-                    <>
-                      {activeTab === 'expert' ? '상세 지원 완료' : currentInfo.label + ' 완료'} <Send className="w-5 h-5" />
-                    </>
-                  )}
-                </button>
+                <div className="grid grid-cols-1 xl:grid-cols-2 gap-x-12 gap-y-10">
+                  {/* Left Column */}
+                  <div className="space-y-10">
+                    
+                    {/* 기본 정보 */}
+                    <div>
+                      <div className="flex items-center gap-2 text-[#4A1D96] font-bold mb-6 border-b border-gray-100 pb-3">
+                        <UserPlus className="w-5 h-5" />
+                        <span className="text-[16px]">기본 정보</span>
+                      </div>
+                      <div className="grid grid-cols-2 gap-x-4 gap-y-6">
+                        <div className="space-y-2">
+                          <label className="text-[13px] font-black text-gray-700 ml-1">성명</label>
+                          <input className="w-full bg-gray-50 border-none rounded-2xl px-4 py-3.5 text-[14px] focus:ring-2 focus:ring-[#4A1D96] font-medium placeholder:text-gray-400 transition-shadow" placeholder="성함" />
+                        </div>
+                        <div className="space-y-2">
+                          <label className="text-[13px] font-black text-gray-700 ml-1">생년월일</label>
+                          <input type="date" className="w-full bg-gray-50 border-none rounded-2xl px-4 py-3.5 text-[14px] focus:ring-2 focus:ring-[#4A1D96] font-medium text-gray-600 appearance-none transition-shadow" />
+                        </div>
+                        <div className="space-y-2">
+                          <label className="text-[13px] font-black text-gray-700 ml-1">연락처</label>
+                          <input className="w-full bg-gray-50 border-none rounded-2xl px-4 py-3.5 text-[14px] focus:ring-2 focus:ring-[#4A1D96] font-medium placeholder:text-gray-400 transition-shadow" placeholder="010-0000-0000" />
+                        </div>
+                        <div className="space-y-2">
+                          <label className="text-[13px] font-black text-gray-700 ml-1">이메일</label>
+                          <input className="w-full bg-gray-50 border-none rounded-2xl px-4 py-3.5 text-[14px] focus:ring-2 focus:ring-[#4A1D96] font-medium placeholder:text-gray-400 transition-shadow" placeholder="example@email.com" />
+                        </div>
+                      </div>
+                    </div>
+                    
+                    {/* 신청 영역 및 지역 */}
+                    <div>
+                      <div className="flex items-center gap-2 text-[#4A1D96] font-bold mb-6 border-b border-gray-100 pb-3">
+                        <BookOpen className="w-5 h-5" />
+                        <span className="text-[16px]">신청 영역 및 지역</span>
+                      </div>
+                      <div className="space-y-6">
+                        <div className="grid grid-cols-3 gap-3">
+                          <div className="space-y-2">
+                            <label className="text-[13px] font-black text-gray-700 ml-1">신청 영역</label>
+                            <select className="w-full bg-gray-50 border-none rounded-2xl px-3 py-3 text-[13px] focus:ring-2 focus:ring-[#4A1D96] font-medium text-gray-600 appearance-none transition-shadow cursor-pointer">
+                              <option>영역 선택</option>
+                            </select>
+                          </div>
+                          <div className="space-y-2">
+                            <label className="text-[13px] font-black text-gray-700 ml-1">분류</label>
+                            <select className="w-full bg-gray-50 border-none rounded-2xl px-3 py-3 text-[13px] focus:ring-2 focus:ring-[#4A1D96] font-medium text-gray-600 appearance-none transition-shadow cursor-pointer">
+                              <option>분류 선택</option>
+                            </select>
+                          </div>
+                          <div className="space-y-2">
+                            <label className="text-[13px] font-black text-gray-700 ml-1">급수</label>
+                            <select className="w-full bg-gray-50 border-none rounded-2xl px-3 py-3 text-[13px] focus:ring-2 focus:ring-[#4A1D96] font-medium text-gray-600 appearance-none transition-shadow cursor-pointer">
+                              <option>급수 선택</option>
+                            </select>
+                          </div>
+                        </div>
+
+                        <div className="grid grid-cols-2 gap-4">
+                          <div className="space-y-2">
+                            <label className="text-[13px] font-black text-gray-700 ml-1">수업 신청지역</label>
+                            <select className="w-full bg-gray-50 border-none rounded-2xl px-4 py-3.5 text-[13px] focus:ring-2 focus:ring-[#4A1D96] font-medium text-gray-600 appearance-none transition-shadow cursor-pointer">
+                              <option>지역 선택</option>
+                            </select>
+                          </div>
+                          <div className="space-y-2">
+                            <label className="text-[13px] font-black text-gray-700 ml-1">희망 일정</label>
+                            <div className="flex gap-2">
+                              <select className="w-full bg-gray-50 border-none rounded-xl px-2 py-3.5 text-[13px] focus:ring-2 focus:ring-[#4A1D96] font-medium text-gray-600 appearance-none text-center transition-shadow cursor-pointer"><option>월</option></select>
+                              <select className="w-full bg-gray-50 border-none rounded-xl px-2 py-3.5 text-[13px] focus:ring-2 focus:ring-[#4A1D96] font-medium text-gray-600 appearance-none text-center transition-shadow cursor-pointer"><option>일</option></select>
+                              <select className="w-full bg-gray-50 border-none rounded-xl px-2 py-3.5 text-[13px] focus:ring-2 focus:ring-[#4A1D96] font-medium text-gray-600 appearance-none text-center transition-shadow cursor-pointer"><option>시</option></select>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                  </div>
+
+                  {/* Right Column */}
+                  <div className="space-y-10">
+                    
+                    {/* 추가 배경 정보 */}
+                    <div>
+                      <div className="flex items-center gap-2 text-[#4A1D96] font-bold mb-6 border-b border-gray-100 pb-3">
+                        <GraduationCap className="w-5 h-5" />
+                        <span className="text-[16px]">추가 배경 정보</span>
+                      </div>
+                      <div className="grid grid-cols-2 gap-x-6 gap-y-6">
+                        <div className="space-y-4">
+                          <label className="text-[13px] font-black text-gray-700 ml-1 block">최종 학력</label>
+                          <div className="grid grid-cols-2 gap-y-3 gap-x-2">
+                            {["현재 학생", "대학교", "석사", "박사", "해외대학"].map((edu) => (
+                              <label key={edu} className="flex items-center gap-2 cursor-pointer group">
+                                <input type="checkbox" className="w-4 h-4 text-[#4A1D96] rounded border-gray-300 focus:ring-[#4A1D96] transition-colors" />
+                                <span className="text-[13px] font-bold text-gray-600 group-hover:text-gray-900">{edu}</span>
+                              </label>
+                            ))}
+                          </div>
+                        </div>
+                        <div className="space-y-4">
+                          <label className="text-[13px] font-black text-gray-700 ml-1 block">현재 직업</label>
+                          <div className="grid grid-cols-2 gap-y-3 gap-x-2">
+                            {["강사", "번역사", "직장인", "취업준비생"].map((job) => (
+                              <label key={job} className="flex items-center gap-2 cursor-pointer group">
+                                <input type="checkbox" className="w-4 h-4 text-[#4A1D96] rounded border-gray-300 focus:ring-[#4A1D96] transition-colors" />
+                                <span className="text-[13px] font-bold text-gray-600 group-hover:text-gray-900">{job}</span>
+                              </label>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* 관심 영역 */}
+                    <div>
+                      <div className="flex items-center gap-2 text-[#4A1D96] font-bold mb-6 border-b border-gray-100 pb-3">
+                        <Award className="w-5 h-5" />
+                        <span className="text-[16px]">관심 영역</span>
+                      </div>
+                      <div className="space-y-5">
+                        <div className="flex flex-wrap gap-x-6 gap-y-3">
+                          {["취업", "자격증 취득", "업무 능력향상", "그외"].map((interest) => (
+                            <label key={interest} className="flex items-center gap-2 cursor-pointer group">
+                              <input type="checkbox" className="w-4 h-4 text-[#4A1D96] rounded border-gray-300 focus:ring-[#4A1D96] transition-colors" />
+                              <span className="text-[13px] font-bold text-gray-600 group-hover:text-gray-900">{interest}</span>
+                            </label>
+                          ))}
+                        </div>
+                        <input className="w-full bg-gray-50 border-none rounded-2xl px-4 py-3.5 text-[14px] focus:ring-2 focus:ring-[#4A1D96] font-medium placeholder:text-gray-400 transition-shadow" placeholder="그외 관심 분야 직접 입력" />
+                      </div>
+                    </div>
+
+                    {/* 추가 문의 사항 */}
+                    <div>
+                      <div className="flex items-center gap-2 text-[#4A1D96] font-bold mb-6 border-b border-gray-100 pb-3">
+                        <MessageSquare className="w-5 h-5" />
+                        <span className="text-[16px]">추가 문의 사항</span>
+                      </div>
+                      <textarea 
+                        rows={3}
+                        className="w-full bg-gray-50 border-none rounded-2xl px-4 py-3.5 text-[14px] focus:ring-2 focus:ring-[#4A1D96] font-medium placeholder:text-gray-400 resize-none transition-shadow" 
+                        placeholder="상담 시 참고 사항이나 궁금한 점" 
+                      />
+                    </div>
+
+                  </div>
+                </div>
+
+                {/* Bottom Privacy & Submit */}
+                <div className="flex flex-col xl:flex-row justify-between items-center gap-6 pt-6 border-t border-gray-100 mt-6">
+                  <div className="p-5 bg-gray-50 rounded-2xl flex-1 w-full border border-gray-100 hover:border-[#4A1D96]/30 transition-colors">
+                    <label className="flex items-start gap-4 cursor-pointer group">
+                      <input type="checkbox" required className="mt-1 w-5 h-5 rounded border-gray-300 text-[#4A1D96] focus:ring-[#4A1D96] transition-colors" />
+                      <div className="flex flex-col">
+                        <span className="text-[14px] text-gray-900 font-extrabold mb-1 group-hover:text-[#4A1D96] transition-colors">
+                          개인정보 수집 및 이용에 동의합니다 (필수)
+                        </span>
+                        <span className="text-[12px] text-gray-500 font-medium leading-relaxed">
+                          입력하신 정보는 상담 안내 목적으로만 활용되며 관련 법령에 따라 보호됩니다.
+                        </span>
+                      </div>
+                    </label>
+                  </div>
+
+                  <button 
+                    type="submit"
+                    disabled={isSubmitting}
+                    className="w-full xl:w-auto px-10 bg-[#4A1D96] hover:bg-[#3d187b] text-white py-5 rounded-2xl font-black text-lg transition-all flex items-center justify-center gap-3 shadow-xl shadow-purple-900/20 disabled:opacity-50 shrink-0"
+                  >
+                    {isSubmitting ? (
+                      <span className="flex items-center gap-2">
+                        <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                        전송 중...
+                      </span>
+                    ) : (
+                      <>
+                        신청 완료하기 <Send className="w-5 h-5" />
+                      </>
+                    )}
+                  </button>
+                </div>
+                
               </form>
             </motion.div>
           </div>

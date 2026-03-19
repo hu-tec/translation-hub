@@ -67,12 +67,12 @@ export function Layout() {
             </span>
             <span className="flex items-center gap-1.5 opacity-90 font-bold">
               <Mail className="w-3.5 h-3.5" />
-              hutechc02@gmail.com
+              hutechc01@gmail.com
             </span>
           </div>
           <span className="flex items-center gap-1.5 opacity-90 font-bold">
             <MapPin className="w-3.5 h-3.5" />
-            서울 서초구 양재천로 19길 26, 6층 (양재동)
+            서울 서초구 양재천로 19길 26, 6층(양재동)
           </span>
         </div>
       </div>
@@ -309,16 +309,20 @@ export function Layout() {
               <h4 className="text-white font-black mb-8 text-lg">연락처</h4>
               <ul className="space-y-6 text-sm">
                 <li className="flex items-start gap-4">
+                  <Building2 className="w-5 h-5 text-indigo-400 shrink-0 mt-0.5" />
+                  <p className="text-gray-300 font-bold leading-relaxed">상호명 : (주)휴텍씨</p>
+                </li>
+                <li className="flex items-start gap-4">
                   <MapPin className="w-5 h-5 text-blue-500 shrink-0 mt-0.5" />
-                  <p className="text-gray-300 font-bold leading-relaxed">서울 서초구 양재천로 19길 26, 6층 (양재동, 삼북빌딩)</p>
+                  <p className="text-gray-300 font-bold leading-relaxed">주소 : 서울 서초구 양재천로 19길 26, 6층(양재동)</p>
                 </li>
                 <li className="flex items-center gap-4">
-                  <Phone className="w-5 h-5 text-purple-500 shrink-0" />
-                  <p className="text-gray-300 font-bold">02-6207-9090</p>
+                  <FileText className="w-5 h-5 text-purple-500 shrink-0" />
+                  <p className="text-gray-300 font-bold">사업자번호 : 368-81-01113</p>
                 </li>
                 <li className="flex items-center gap-4">
                   <Mail className="w-5 h-5 text-blue-400 shrink-0" />
-                  <p className="text-gray-300 font-bold">hutechc02@gmail.com</p>
+                  <p className="text-gray-300 font-bold">문의 : hutechc01@gmail.com</p>
                 </li>
               </ul>
             </div>
@@ -328,13 +332,13 @@ export function Layout() {
             <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-10">
               <div className="space-y-2">
                 <div className="flex flex-wrap gap-x-6 gap-y-1 text-sm font-bold text-gray-300">
-                   <p>상호명: 주식회사 휴텍씨</p>
+                   <p>상호명: (주)휴텍씨</p>
                    <p>대표이사: 박미진</p>
-                   <p>사업자등록번호: 214-87-54895</p>
+                   <p>사업자등록번호: 368-81-01113</p>
                 </div>
                 <div className="flex flex-wrap gap-x-6 gap-y-1 text-sm font-bold text-gray-300">
                    <p>통신판매업신고: 제 2024-서울서초-0123호</p>
-                   <p>전화: 02-6207-9090</p>
+                   <p>문의: hutechc01@gmail.com</p>
                 </div>
                 <p className="text-xs text-gray-500 mt-8 font-medium tracking-wider uppercase">&copy; 2026 HuTechC Global Group. All rights reserved.</p>
               </div>
