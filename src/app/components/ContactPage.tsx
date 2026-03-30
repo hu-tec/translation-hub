@@ -2,8 +2,11 @@ import { useState } from "react";
 import { Phone, Mail, MapPin, Clock, Send, CheckCircle } from "lucide-react";
 import { motion } from "motion/react";
 
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+
 export function ContactPage() {
   const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -12,9 +15,22 @@ export function ContactPage() {
     message: "",
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSubmitted(true);
+    setSubmitting(true);
+    try {
+      const res = await fetch(`${API_URL}/api/translation_contacts`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      });
+      if (!res.ok) throw new Error('서버 오류');
+      setSubmitted(true);
+    } catch {
+      alert('문의 접수에 실패했습니다. 잠시 후 다시 시도해주세요.');
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -155,7 +171,7 @@ export function ContactPage() {
                     className="w-full bg-[#4A1D96] text-white py-3 rounded-xl hover:bg-[#3B1578] transition-colors flex items-center justify-center gap-2"
                     style={{ fontWeight: 600 }}
                   >
-                    <Send className="w-4 h-4" /> 문의 보내기
+                    {submitting ? null : <Send className="w-4 h-4" />} {submitting ? '접수 중...' : '문의 보내기'}
                   </button>
                 </form>
               )}
