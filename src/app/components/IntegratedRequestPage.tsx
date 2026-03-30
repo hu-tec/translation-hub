@@ -89,9 +89,14 @@ export function IntegratedRequestPage() {
   const formRef = useRef<HTMLFormElement>(null);
 
   const onSubmit = async (_data: any) => {
-    // react-hook-form register가 없는 필드들이 많으므로 FormData로 직접 수집
     const form = formRef.current;
     if (!form) return;
+    // 개인정보 동의 수동 검증
+    const privacyCheckbox = form.querySelector<HTMLInputElement>('input[name="privacyConsent"]');
+    if (!privacyCheckbox?.checked) {
+      toast.error("개인정보 수집 및 이용에 동의해주세요.");
+      return;
+    }
     const formData = new FormData(form);
     const collected: Record<string, any> = { requestType: activeTab };
     formData.forEach((value, key) => {
@@ -383,19 +388,19 @@ export function IntegratedRequestPage() {
                           <div className="space-y-2">
                             <label className="text-[13px] font-black text-gray-700 ml-1">신청 영역</label>
                             <select name="area" className="w-full bg-gray-50 border-none rounded-2xl px-3 py-3 text-[13px] focus:ring-2 focus:ring-[#4A1D96] font-medium text-gray-600 appearance-none transition-shadow cursor-pointer">
-                              <option>영역 선택</option>
+                              <option value="">영역 선택</option>
                             </select>
                           </div>
                           <div className="space-y-2">
                             <label className="text-[13px] font-black text-gray-700 ml-1">분류</label>
                             <select name="classification" className="w-full bg-gray-50 border-none rounded-2xl px-3 py-3 text-[13px] focus:ring-2 focus:ring-[#4A1D96] font-medium text-gray-600 appearance-none transition-shadow cursor-pointer">
-                              <option>분류 선택</option>
+                              <option value="">분류 선택</option>
                             </select>
                           </div>
                           <div className="space-y-2">
                             <label className="text-[13px] font-black text-gray-700 ml-1">급수</label>
                             <select name="level" className="w-full bg-gray-50 border-none rounded-2xl px-3 py-3 text-[13px] focus:ring-2 focus:ring-[#4A1D96] font-medium text-gray-600 appearance-none transition-shadow cursor-pointer">
-                              <option>급수 선택</option>
+                              <option value="">급수 선택</option>
                             </select>
                           </div>
                         </div>
@@ -404,7 +409,7 @@ export function IntegratedRequestPage() {
                           <div className="space-y-2">
                             <label className="text-[13px] font-black text-gray-700 ml-1">수업 신청지역</label>
                             <select name="region" className="w-full bg-gray-50 border-none rounded-2xl px-4 py-3.5 text-[13px] focus:ring-2 focus:ring-[#4A1D96] font-medium text-gray-600 appearance-none transition-shadow cursor-pointer">
-                              <option>지역 선택</option>
+                              <option value="">지역 선택</option>
                             </select>
                           </div>
                           <div className="space-y-2">
@@ -496,7 +501,7 @@ export function IntegratedRequestPage() {
                 <div className="flex flex-col xl:flex-row justify-between items-center gap-6 pt-6 border-t border-gray-100 mt-6">
                   <div className="p-5 bg-gray-50 rounded-2xl flex-1 w-full border border-gray-100 hover:border-[#4A1D96]/30 transition-colors">
                     <label className="flex items-start gap-4 cursor-pointer group">
-                      <input type="checkbox" required className="mt-1 w-5 h-5 rounded border-gray-300 text-[#4A1D96] focus:ring-[#4A1D96] transition-colors" />
+                      <input type="checkbox" name="privacyConsent" required className="mt-1 w-5 h-5 rounded border-gray-300 text-[#4A1D96] focus:ring-[#4A1D96] transition-colors" />
                       <div className="flex flex-col">
                         <span className="text-[14px] text-gray-900 font-extrabold mb-1 group-hover:text-[#4A1D96] transition-colors">
                           개인정보 수집 및 이용에 동의합니다 (필수)

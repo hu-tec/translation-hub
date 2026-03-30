@@ -8,12 +8,15 @@ import { ServiceSelector } from "./ServiceSelector";
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
 async function uploadFile(file: File, folder: string): Promise<string> {
-  const { uploadUrl, fileUrl } = await fetch(`${API_URL}/api/upload/presign`, {
+  const presignRes = await fetch(`${API_URL}/api/upload/presign`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ filename: file.name, contentType: file.type, folder }),
-  }).then(r => r.json());
-  await fetch(uploadUrl, { method: 'PUT', body: file, headers: { 'Content-Type': file.type } });
+  });
+  if (!presignRes.ok) throw new Error('파일 업로드 URL 생성 실패');
+  const { uploadUrl, fileUrl } = await presignRes.json();
+  const putRes = await fetch(uploadUrl, { method: 'PUT', body: file, headers: { 'Content-Type': file.type } });
+  if (!putRes.ok) throw new Error('파일 업로드 실패');
   return fileUrl;
 }
 
@@ -51,7 +54,7 @@ export function ExpertApplyPage() {
       }
       const finalData = {
         name: data.name, email: data.email, phone: data.phone,
-        langs: data.langs, experience: data.experience, about: data.about,
+        langs: data.langs, experience: data.experience,
         specialty: selectedService, resumeUrl, portfolioUrl,
       };
       const res = await fetch(`${API_URL}/api/translation_experts`, {

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { Phone, Mail, MapPin, Clock, Send, CheckCircle } from "lucide-react";
 import { motion } from "motion/react";
 

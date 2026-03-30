@@ -366,7 +366,7 @@ export function ExpertsInfoPage() {
 
                   <div className="p-6 bg-purple-50 rounded-3xl border border-purple-100">
                     <label className="flex items-start gap-4 cursor-pointer">
-                      <input type="checkbox" required className="mt-1 w-5 h-5 rounded border-gray-300 text-[#4A1D96] focus:ring-[#4A1D96]" />
+                      <input type="checkbox" {...register("privacyConsent", { required: true })} className="mt-1 w-5 h-5 rounded border-gray-300 text-[#4A1D96] focus:ring-[#4A1D96]" />
                       <span className="text-sm text-gray-600 font-bold leading-relaxed">
                         개인정보 수집 및 이용에 동의합니다. (필수)
                       </span>
