@@ -1,12 +1,14 @@
 import { motion } from "motion/react";
-import { 
-  Users, Globe, Award, ShieldCheck, Zap, Briefcase, 
-  GraduationCap, CheckCircle2, DollarSign, Clock, 
+import {
+  Users, Globe, Award, ShieldCheck, Zap, Briefcase,
+  GraduationCap, CheckCircle2, DollarSign, Clock,
   TrendingUp, Headphones, PenTool, Database, Heart,
   ArrowRight, Check, Shield, Sparkles, FileText, Send,
   FileSearch, BookOpen, MessageSquare, Laptop, UserPlus,
   Monitor, Cpu
 } from "lucide-react";
+
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 import { ImageWithFallback } from "./figma/ImageWithFallback";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -78,10 +80,18 @@ export function ExpertsInfoPage() {
   });
 
   const onSubmit = async (data: any) => {
-    console.log("Expert Recruitment Application:", data);
-    await new Promise(resolve => setTimeout(resolve, 1500));
-    toast.success("전문가 지원서가 정상적으로 접수되었습니다. 검토 후 연락드리겠습니다.");
-    reset();
+    try {
+      const res = await fetch(`${API_URL}/api/translation_translators`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
+      if (!res.ok) throw new Error('서버 오류');
+      toast.success("전문가 지원서가 정상적으로 접수되었습니다. 검토 후 연락드리겠습니다.");
+      reset();
+    } catch {
+      toast.error("접수에 실패했습니다. 잠시 후 다시 시도해주세요.");
+    }
   };
 
   const scrollToForm = () => {

@@ -1,13 +1,15 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import { 
-  Send, UserPlus, Calculator, FileText, Check, 
+import {
+  Send, UserPlus, Calculator, FileText, Check,
   ArrowRight, Shield, Globe, Award, Sparkles,
   Phone, Mail, Clock, MapPin, Search, ChevronRight, BookOpen, GraduationCap, MessageSquare
 } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { useLocation } from "react-router";
+
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
 type RequestType = "translation" | "expert" | "quote";
 
@@ -84,11 +86,36 @@ export function IntegratedRequestPage() {
     }
   }, [location]);
 
-  const onSubmit = async (data: any) => {
-    console.log(`Submitted ${activeTab}:`, data);
-    await new Promise(resolve => setTimeout(resolve, 1500));
-    toast.success(`${REQUEST_TYPES.find(t => t.id === activeTab)?.label}이 접수되었습니다. 곧 연락드리겠습니다.`);
-    reset();
+  const formRef = useRef<HTMLFormElement>(null);
+
+  const onSubmit = async (_data: any) => {
+    // react-hook-form register가 없는 필드들이 많으므로 FormData로 직접 수집
+    const form = formRef.current;
+    if (!form) return;
+    const formData = new FormData(form);
+    const collected: Record<string, any> = { requestType: activeTab };
+    formData.forEach((value, key) => {
+      if (collected[key]) {
+        // 체크박스 다중값
+        if (Array.isArray(collected[key])) collected[key].push(value);
+        else collected[key] = [collected[key], value];
+      } else {
+        collected[key] = value;
+      }
+    });
+    try {
+      const res = await fetch(`${API_URL}/api/translation_integrated`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(collected),
+      });
+      if (!res.ok) throw new Error('서버 오류');
+      toast.success(`${REQUEST_TYPES.find(t => t.id === activeTab)?.label}이 접수되었습니다. 곧 연락드리겠습니다.`);
+      reset();
+      form.reset();
+    } catch {
+      toast.error("접수에 실패했습니다. 잠시 후 다시 시도해주세요.");
+    }
   };
 
   const currentInfo = REQUEST_TYPES.find(t => t.id === activeTab)!;
@@ -289,7 +316,7 @@ export function IntegratedRequestPage() {
               animate={{ opacity: 1, x: 0 }}
               className="bg-white rounded-[40px] p-8 md:p-10 shadow-sm border border-gray-100"
             >
-              <form onSubmit={handleSubmit(onSubmit)} className="space-y-10">
+              <form ref={formRef} onSubmit={handleSubmit(onSubmit)} className="space-y-10">
                 
                 {/* 1. 신청 구분 Box */}
                 <div className="p-6 rounded-2xl border border-gray-100 bg-gray-50/50 flex flex-col xl:flex-row xl:items-center gap-6">
@@ -305,7 +332,9 @@ export function IntegratedRequestPage() {
                         <input 
                           type="checkbox" 
                           defaultChecked={idx === 0}
-                          className="w-5 h-5 text-[#4A1D96] rounded border-gray-300 focus:ring-[#4A1D96] transition-colors" 
+                          name="requestTypes"
+                          value={type}
+                          className="w-5 h-5 text-[#4A1D96] rounded border-gray-300 focus:ring-[#4A1D96] transition-colors"
                         />
                         <span className="text-[15px] font-bold text-gray-700 group-hover:text-gray-900 transition-colors">{type}</span>
                       </label>
@@ -326,19 +355,19 @@ export function IntegratedRequestPage() {
                       <div className="grid grid-cols-2 gap-x-4 gap-y-6">
                         <div className="space-y-2">
                           <label className="text-[13px] font-black text-gray-700 ml-1">성명</label>
-                          <input className="w-full bg-gray-50 border-none rounded-2xl px-4 py-3.5 text-[14px] focus:ring-2 focus:ring-[#4A1D96] font-medium placeholder:text-gray-400 transition-shadow" placeholder="성함" />
+                          <input name="name" className="w-full bg-gray-50 border-none rounded-2xl px-4 py-3.5 text-[14px] focus:ring-2 focus:ring-[#4A1D96] font-medium placeholder:text-gray-400 transition-shadow" placeholder="성함" />
                         </div>
                         <div className="space-y-2">
                           <label className="text-[13px] font-black text-gray-700 ml-1">생년월일</label>
-                          <input type="date" className="w-full bg-gray-50 border-none rounded-2xl px-4 py-3.5 text-[14px] focus:ring-2 focus:ring-[#4A1D96] font-medium text-gray-600 appearance-none transition-shadow" />
+                          <input name="birthDate" type="date" className="w-full bg-gray-50 border-none rounded-2xl px-4 py-3.5 text-[14px] focus:ring-2 focus:ring-[#4A1D96] font-medium text-gray-600 appearance-none transition-shadow" />
                         </div>
                         <div className="space-y-2">
                           <label className="text-[13px] font-black text-gray-700 ml-1">연락처</label>
-                          <input className="w-full bg-gray-50 border-none rounded-2xl px-4 py-3.5 text-[14px] focus:ring-2 focus:ring-[#4A1D96] font-medium placeholder:text-gray-400 transition-shadow" placeholder="010-0000-0000" />
+                          <input name="phone" className="w-full bg-gray-50 border-none rounded-2xl px-4 py-3.5 text-[14px] focus:ring-2 focus:ring-[#4A1D96] font-medium placeholder:text-gray-400 transition-shadow" placeholder="010-0000-0000" />
                         </div>
                         <div className="space-y-2">
                           <label className="text-[13px] font-black text-gray-700 ml-1">이메일</label>
-                          <input className="w-full bg-gray-50 border-none rounded-2xl px-4 py-3.5 text-[14px] focus:ring-2 focus:ring-[#4A1D96] font-medium placeholder:text-gray-400 transition-shadow" placeholder="example@email.com" />
+                          <input name="email" className="w-full bg-gray-50 border-none rounded-2xl px-4 py-3.5 text-[14px] focus:ring-2 focus:ring-[#4A1D96] font-medium placeholder:text-gray-400 transition-shadow" placeholder="example@email.com" />
                         </div>
                       </div>
                     </div>
@@ -353,19 +382,19 @@ export function IntegratedRequestPage() {
                         <div className="grid grid-cols-3 gap-3">
                           <div className="space-y-2">
                             <label className="text-[13px] font-black text-gray-700 ml-1">신청 영역</label>
-                            <select className="w-full bg-gray-50 border-none rounded-2xl px-3 py-3 text-[13px] focus:ring-2 focus:ring-[#4A1D96] font-medium text-gray-600 appearance-none transition-shadow cursor-pointer">
+                            <select name="area" className="w-full bg-gray-50 border-none rounded-2xl px-3 py-3 text-[13px] focus:ring-2 focus:ring-[#4A1D96] font-medium text-gray-600 appearance-none transition-shadow cursor-pointer">
                               <option>영역 선택</option>
                             </select>
                           </div>
                           <div className="space-y-2">
                             <label className="text-[13px] font-black text-gray-700 ml-1">분류</label>
-                            <select className="w-full bg-gray-50 border-none rounded-2xl px-3 py-3 text-[13px] focus:ring-2 focus:ring-[#4A1D96] font-medium text-gray-600 appearance-none transition-shadow cursor-pointer">
+                            <select name="classification" className="w-full bg-gray-50 border-none rounded-2xl px-3 py-3 text-[13px] focus:ring-2 focus:ring-[#4A1D96] font-medium text-gray-600 appearance-none transition-shadow cursor-pointer">
                               <option>분류 선택</option>
                             </select>
                           </div>
                           <div className="space-y-2">
                             <label className="text-[13px] font-black text-gray-700 ml-1">급수</label>
-                            <select className="w-full bg-gray-50 border-none rounded-2xl px-3 py-3 text-[13px] focus:ring-2 focus:ring-[#4A1D96] font-medium text-gray-600 appearance-none transition-shadow cursor-pointer">
+                            <select name="level" className="w-full bg-gray-50 border-none rounded-2xl px-3 py-3 text-[13px] focus:ring-2 focus:ring-[#4A1D96] font-medium text-gray-600 appearance-none transition-shadow cursor-pointer">
                               <option>급수 선택</option>
                             </select>
                           </div>
@@ -374,16 +403,16 @@ export function IntegratedRequestPage() {
                         <div className="grid grid-cols-2 gap-4">
                           <div className="space-y-2">
                             <label className="text-[13px] font-black text-gray-700 ml-1">수업 신청지역</label>
-                            <select className="w-full bg-gray-50 border-none rounded-2xl px-4 py-3.5 text-[13px] focus:ring-2 focus:ring-[#4A1D96] font-medium text-gray-600 appearance-none transition-shadow cursor-pointer">
+                            <select name="region" className="w-full bg-gray-50 border-none rounded-2xl px-4 py-3.5 text-[13px] focus:ring-2 focus:ring-[#4A1D96] font-medium text-gray-600 appearance-none transition-shadow cursor-pointer">
                               <option>지역 선택</option>
                             </select>
                           </div>
                           <div className="space-y-2">
                             <label className="text-[13px] font-black text-gray-700 ml-1">희망 일정</label>
                             <div className="flex gap-2">
-                              <select className="w-full bg-gray-50 border-none rounded-xl px-2 py-3.5 text-[13px] focus:ring-2 focus:ring-[#4A1D96] font-medium text-gray-600 appearance-none text-center transition-shadow cursor-pointer"><option>월</option></select>
-                              <select className="w-full bg-gray-50 border-none rounded-xl px-2 py-3.5 text-[13px] focus:ring-2 focus:ring-[#4A1D96] font-medium text-gray-600 appearance-none text-center transition-shadow cursor-pointer"><option>일</option></select>
-                              <select className="w-full bg-gray-50 border-none rounded-xl px-2 py-3.5 text-[13px] focus:ring-2 focus:ring-[#4A1D96] font-medium text-gray-600 appearance-none text-center transition-shadow cursor-pointer"><option>시</option></select>
+                              <select name="scheduleMonth" className="w-full bg-gray-50 border-none rounded-xl px-2 py-3.5 text-[13px] focus:ring-2 focus:ring-[#4A1D96] font-medium text-gray-600 appearance-none text-center transition-shadow cursor-pointer"><option>월</option></select>
+                              <select name="scheduleDay" className="w-full bg-gray-50 border-none rounded-xl px-2 py-3.5 text-[13px] focus:ring-2 focus:ring-[#4A1D96] font-medium text-gray-600 appearance-none text-center transition-shadow cursor-pointer"><option>일</option></select>
+                              <select name="scheduleTime" className="w-full bg-gray-50 border-none rounded-xl px-2 py-3.5 text-[13px] focus:ring-2 focus:ring-[#4A1D96] font-medium text-gray-600 appearance-none text-center transition-shadow cursor-pointer"><option>시</option></select>
                             </div>
                           </div>
                         </div>
@@ -407,7 +436,7 @@ export function IntegratedRequestPage() {
                           <div className="grid grid-cols-2 gap-y-3 gap-x-2">
                             {["현재 학생", "대학교", "석사", "박사", "해외대학"].map((edu) => (
                               <label key={edu} className="flex items-center gap-2 cursor-pointer group">
-                                <input type="checkbox" className="w-4 h-4 text-[#4A1D96] rounded border-gray-300 focus:ring-[#4A1D96] transition-colors" />
+                                <input type="checkbox" name="education" value={edu} className="w-4 h-4 text-[#4A1D96] rounded border-gray-300 focus:ring-[#4A1D96] transition-colors" />
                                 <span className="text-[13px] font-bold text-gray-600 group-hover:text-gray-900">{edu}</span>
                               </label>
                             ))}
@@ -418,7 +447,7 @@ export function IntegratedRequestPage() {
                           <div className="grid grid-cols-2 gap-y-3 gap-x-2">
                             {["강사", "번역사", "직장인", "취업준비생"].map((job) => (
                               <label key={job} className="flex items-center gap-2 cursor-pointer group">
-                                <input type="checkbox" className="w-4 h-4 text-[#4A1D96] rounded border-gray-300 focus:ring-[#4A1D96] transition-colors" />
+                                <input type="checkbox" name="job" value={job} className="w-4 h-4 text-[#4A1D96] rounded border-gray-300 focus:ring-[#4A1D96] transition-colors" />
                                 <span className="text-[13px] font-bold text-gray-600 group-hover:text-gray-900">{job}</span>
                               </label>
                             ))}
@@ -437,12 +466,12 @@ export function IntegratedRequestPage() {
                         <div className="flex flex-wrap gap-x-6 gap-y-3">
                           {["취업", "자격증 취득", "업무 능력향상", "그외"].map((interest) => (
                             <label key={interest} className="flex items-center gap-2 cursor-pointer group">
-                              <input type="checkbox" className="w-4 h-4 text-[#4A1D96] rounded border-gray-300 focus:ring-[#4A1D96] transition-colors" />
+                              <input type="checkbox" name="interests" value={interest} className="w-4 h-4 text-[#4A1D96] rounded border-gray-300 focus:ring-[#4A1D96] transition-colors" />
                               <span className="text-[13px] font-bold text-gray-600 group-hover:text-gray-900">{interest}</span>
                             </label>
                           ))}
                         </div>
-                        <input className="w-full bg-gray-50 border-none rounded-2xl px-4 py-3.5 text-[14px] focus:ring-2 focus:ring-[#4A1D96] font-medium placeholder:text-gray-400 transition-shadow" placeholder="그외 관심 분야 직접 입력" />
+                        <input name="otherInterests" className="w-full bg-gray-50 border-none rounded-2xl px-4 py-3.5 text-[14px] focus:ring-2 focus:ring-[#4A1D96] font-medium placeholder:text-gray-400 transition-shadow" placeholder="그외 관심 분야 직접 입력" />
                       </div>
                     </div>
 
@@ -452,10 +481,11 @@ export function IntegratedRequestPage() {
                         <MessageSquare className="w-5 h-5" />
                         <span className="text-[16px]">추가 문의 사항</span>
                       </div>
-                      <textarea 
+                      <textarea
+                        name="additionalNotes"
                         rows={3}
-                        className="w-full bg-gray-50 border-none rounded-2xl px-4 py-3.5 text-[14px] focus:ring-2 focus:ring-[#4A1D96] font-medium placeholder:text-gray-400 resize-none transition-shadow" 
-                        placeholder="상담 시 참고 사항이나 궁금한 점" 
+                        className="w-full bg-gray-50 border-none rounded-2xl px-4 py-3.5 text-[14px] focus:ring-2 focus:ring-[#4A1D96] font-medium placeholder:text-gray-400 resize-none transition-shadow"
+                        placeholder="상담 시 참고 사항이나 궁금한 점"
                       />
                     </div>
 

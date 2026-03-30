@@ -5,6 +5,8 @@ import { Calculator, Send, CheckCircle2, Clock, Zap, BarChart3 } from "lucide-re
 import { useState } from "react";
 import { ServiceSelector } from "./ServiceSelector";
 
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+
 type QuoteFormData = {
   name: string;
   email: string;
@@ -27,10 +29,18 @@ export function QuoteRequestPage() {
       return;
     }
     const finalData = { ...data, service: selectedService };
-    console.log("Quote Request:", finalData);
-    await new Promise(resolve => setTimeout(resolve, 1500));
-    setSubmitted(true);
-    toast.success("견적 의뢰가 성공적으로 접수되었습니다. 최단 시간 내에 안내드리겠습니다.");
+    try {
+      const res = await fetch(`${API_URL}/api/translation_quotes`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(finalData),
+      });
+      if (!res.ok) throw new Error('서버 오류');
+      setSubmitted(true);
+      toast.success("견적 의뢰가 성공적으로 접수되었습니다. 최단 시간 내에 안내드리겠습니다.");
+    } catch {
+      toast.error("접수에 실패했습니다. 잠시 후 다시 시도해주세요.");
+    }
   };
 
   if (submitted) {
