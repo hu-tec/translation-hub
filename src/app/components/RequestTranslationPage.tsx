@@ -5,6 +5,18 @@ import { FileText, Send, CheckCircle2, Globe, Clock, ShieldCheck } from "lucide-
 import { useState } from "react";
 import { ServiceSelector } from "./ServiceSelector";
 
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+
+async function uploadFile(file: File, folder: string): Promise<string> {
+  const { uploadUrl, fileUrl } = await fetch(`${API_URL}/api/upload/presign`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ filename: file.name, contentType: file.type, folder }),
+  }).then(r => r.json());
+  await fetch(uploadUrl, { method: 'PUT', body: file, headers: { 'Content-Type': file.type } });
+  return fileUrl;
+}
+
 type RequestFormData = {
   name: string;
   email: string;
@@ -27,13 +39,32 @@ export function RequestTranslationPage() {
       toast.error("번역 서비스 분야를 선택해 주세요.");
       return;
     }
-    
-    const finalData = { ...data, service: selectedService };
-    console.log("Translation Request:", finalData);
-    
-    await new Promise(resolve => setTimeout(resolve, 1500));
-    setSubmitted(true);
-    toast.success("번역 신청이 성공적으로 접수되었습니다. 전문가가 검토 후 연락드리겠습니다.");
+    try {
+      const fileUrls: string[] = [];
+      const fileList = data.files as FileList;
+      if (fileList?.length > 0) {
+        for (let i = 0; i < fileList.length; i++) {
+          const url = await uploadFile(fileList[i], 'translation-orders');
+          fileUrls.push(url);
+        }
+      }
+      const finalData = {
+        name: data.name, email: data.email, phone: data.phone,
+        company: data.company, sourceLang: data.sourceLang, targetLang: data.targetLang,
+        deadline: data.deadline, description: data.description,
+        service: selectedService, fileUrls,
+      };
+      const res = await fetch(`${API_URL}/api/translation_orders`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(finalData),
+      });
+      if (!res.ok) throw new Error('서버 오류');
+      setSubmitted(true);
+      toast.success("번역 신청이 성공적으로 접수되었습니다. 전문가가 검토 후 연락드리겠습니다.");
+    } catch {
+      toast.error("접수에 실패했습니다. 잠시 후 다시 시도해주세요.");
+    }
   };
 
   if (submitted) {

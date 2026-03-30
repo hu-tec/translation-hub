@@ -5,6 +5,18 @@ import { UserPlus, Briefcase, GraduationCap, CheckCircle2, Globe, FileText, Send
 import { useState } from "react";
 import { ServiceSelector } from "./ServiceSelector";
 
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+
+async function uploadFile(file: File, folder: string): Promise<string> {
+  const { uploadUrl, fileUrl } = await fetch(`${API_URL}/api/upload/presign`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ filename: file.name, contentType: file.type, folder }),
+  }).then(r => r.json());
+  await fetch(uploadUrl, { method: 'PUT', body: file, headers: { 'Content-Type': file.type } });
+  return fileUrl;
+}
+
 type ExpertApplyFormData = {
   name: string;
   email: string;
@@ -26,11 +38,33 @@ export function ExpertApplyPage() {
       toast.error("전문 분야를 선택해 주세요.");
       return;
     }
-    const finalData = { ...data, specialty: selectedService };
-    console.log("Expert Application:", finalData);
-    await new Promise(resolve => setTimeout(resolve, 1500));
-    setSubmitted(true);
-    toast.success("전문가 지원이 성공적으로 접수되었습니다. 담당자가 확인 후 연락드리겠습니다.");
+    try {
+      let resumeUrl = '';
+      let portfolioUrl = '';
+      const resumeFiles = data.resume as FileList;
+      const portfolioFiles = data.portfolio as FileList;
+      if (resumeFiles?.length > 0) {
+        resumeUrl = await uploadFile(resumeFiles[0], 'expert-resume');
+      }
+      if (portfolioFiles?.length > 0) {
+        portfolioUrl = await uploadFile(portfolioFiles[0], 'expert-portfolio');
+      }
+      const finalData = {
+        name: data.name, email: data.email, phone: data.phone,
+        langs: data.langs, experience: data.experience, about: data.about,
+        specialty: selectedService, resumeUrl, portfolioUrl,
+      };
+      const res = await fetch(`${API_URL}/api/translation_experts`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(finalData),
+      });
+      if (!res.ok) throw new Error('서버 오류');
+      setSubmitted(true);
+      toast.success("전문가 지원이 성공적으로 접수되었습니다. 담당자가 확인 후 연락드리겠습니다.");
+    } catch {
+      toast.error("접수에 실패했습니다. 잠시 후 다시 시도해주세요.");
+    }
   };
 
   if (submitted) {
