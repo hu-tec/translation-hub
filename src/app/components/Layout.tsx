@@ -42,8 +42,19 @@ export function Layout() {
   useEffect(() => {
     setMobileOpen(false);
     setActiveDropdown(null);
-    window.scrollTo(0, 0);
-  }, [location.pathname]);
+    
+    if (location.hash) {
+      const id = location.hash.replace('#', '');
+      const element = document.getElementById(id);
+      if (element) {
+        setTimeout(() => {
+          element.scrollIntoView({ behavior: 'smooth' });
+        }, 100);
+      }
+    } else {
+      window.scrollTo(0, 0);
+    }
+  }, [location.pathname, location.hash]);
 
   useEffect(() => {
     function handleClickOutside(e: MouseEvent) {
@@ -296,9 +307,9 @@ export function Layout() {
             <div>
               <h4 className="text-white font-black mb-8 text-lg">바로가기</h4>
               <ul className="space-y-4 text-sm font-bold">
-                <li><Link to="/#about" className="hover:text-white transition-colors">그룹 소개</Link></li>
+                <li><Link to="/#about" onClick={() => document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' })} className="hover:text-white transition-colors">그룹 소개</Link></li>
                 <li><Link to="/" className="hover:text-white transition-colors">AI 신사업</Link></li>
-                <li><Link to="/#about" className="hover:text-white transition-colors">30년 정통사업</Link></li>
+                <li><Link to="/#about" onClick={() => document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' })} className="hover:text-white transition-colors">30년 정통사업</Link></li>
                 <li><Link to="/" className="hover:text-white transition-colors">사회 공헌</Link></li>
                 <li><Link to="/portfolio" className="hover:text-white transition-colors">파트너십 및 인증</Link></li>
                 <li><Link to="/" className="hover:text-white transition-colors">언론 보도</Link></li>
