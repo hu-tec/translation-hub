@@ -5,98 +5,65 @@ import {
   ChefHat, Home, GraduationCap, Sparkles,
   Globe, Tv, FileSearch, Newspaper, Mic, Stethoscope,
   ArrowRight, Volume2, Headphones, FileText, Search, Check,
-  HardHat, Building2, Hammer
+  HardHat, Building2, Hammer, Zap, BookOpen, Dumbbell
 } from "lucide-react";
 import { Link } from "react-router";
 
-const translationTypes = [
-  {
-    id: "stt",
-    title: "음성 → 텍스트 (STT)",
-    subtitle: "Speech to Text",
-    description: "음성을 인식해 텍스트로 변환하는 서비스",
-    color: "#4A1D96",
-    icon: Mic,
-    features: ["예능 / 드라마 / 영화", "SNS · 유튜브", "다큐 · 아나운서 방송", "관광 가이드 · 안내방송", "큐레이션"]
-  },
-  {
-    id: "tts",
-    title: "텍스트 → 음성 (TTS)",
-    subtitle: "Text to Speech",
-    description: "텍스트를 자연스러운 음성으로 변환",
-    color: "#7C3AED",
-    icon: Volume2,
-    features: ["오디오북", "강의 · 음악", "홍보 영상", "방송 나레이션"]
-  },
-  {
-    id: "sts",
-    title: "음성 → 음성 (STS)",
-    subtitle: "Speech to Speech",
-    description: "실시간 다국어 음성 변환 서비스",
-    color: "#6B3FA0",
-    icon: Headphones,
-    features: ["동시통역", "다국어 강의", "외국어 노래/음악 변환", "인터뷰"]
-  },
-  {
-    id: "doc",
-    title: "문서 번역",
-    subtitle: "Document Translation",
-    description: "전문 문서를 다양한 언어로 번역",
-    color: "#1E293B",
-    icon: FileText,
-    features: ["원문 번역 · 고전 번역", "비즈니스 번역", "PPT 번역", "사업 소개서"]
-  },
-  {
-    id: "language",
-    title: "언어별 번역",
-    subtitle: "Language Specific",
-    description: "전 세계 주요 언어 및 희귀 언어 전문 번역",
-    color: "#4F46E5",
-    icon: Languages,
-    features: ["영어 · 일어 · 중국어", "유럽어권 · 동남아어권", "특수 언어 · 희귀 언어", "방언 현지화"]
-  }
-];
-
 const categories = [
   {
-    id: "industry",
-    title: "산업분야 전문 번역",
-    subtitle: "첨단 기술 및 국가 기간 산업 전문",
-    icon: Factory,
-    color: "#1565C0",
+    id: "stt",
+    title: "서비스 유형",
+    subtitle: "다양한 형태의 미디어 지원 로직",
+    icon: Zap,
+    color: "#4A1D96",
     items: [
-      { name: "반도체/조선", icon: Cpu, desc: "정밀 공정 및 설계 도면 전문" },
-      { name: "방산", icon: Shield, desc: "무기체계 및 군사 규격서" },
-      { name: "태양광", icon: Sun, desc: "에너지 인프라 및 기술 문서" },
-      { name: "법률/특허", icon: Gavel, desc: "소송 서류 및 특허 명세서" },
-      { name: "비즈니스/문서", icon: Briefcase, desc: "IR 및 사업 계획서 현지화" },
-      { name: "웹툰/웹소설", icon: PenTool, desc: "창의적 콘텐츠 현지화" },
+      { name: "STT (음성→텍스트)", icon: Mic, desc: "예능/드라마/유튜브 자막 및 녹음본 텍스트 변환" },
+      { name: "TTS (텍스트→음성)", icon: Volume2, desc: "오디오북, 홍보 영상, 방송 나레이션 생성" },
+      { name: "STS (음성→음성)", icon: Headphones, desc: "실시간 동시통역 및 다국어 음성 변환" },
+      { name: "문서 번역", icon: FileText, desc: "비즈니스, 사업 소개서, 원문 및 다국어 문서 번역" },
+      { name: "세부전문분야", icon: Search, desc: "특수한 산업과 환경에 맞춘 심화 전문 번역" },
     ],
   },
   {
-    id: "construction",
-    title: "건설분야 전문 번역",
-    subtitle: "대형 플랜트 및 인프라 건설 기술 전문",
-    icon: HardHat,
-    color: "#F57C00",
+    id: "industry",
+    title: "산업별",
+    subtitle: "첨단 기술 및 국가 기간 산업 전문 번역",
+    icon: Factory,
+    color: "#1565C0",
     items: [
-      { name: "건축/토목", icon: Building2, desc: "설계도면 및 시공계획서" },
-      { name: "에너지/플랜트", icon: Factory, desc: "플랜트 설계 및 운영 매뉴얼" },
-      { name: "중기계/설비", icon: Hammer, desc: "중장비 사양서 및 유지보수" },
-      { name: "SOC/인프라", icon: Globe, desc: "국가 기반 시설 프로젝트" },
+      { name: "반도체/조선", icon: Cpu, desc: "정밀 공정 매뉴얼 및 설계 도면 번역 작업" },
+      { name: "방산", icon: Shield, desc: "방위산업 기술 제안서 및 고도 보안 문서" },
+      { name: "태양광", icon: Sun, desc: "신재생에너지 인프라 및 기술 가이드라인" },
+      { name: "법률/특허", icon: Gavel, desc: "국제 소송 판결문 및 특허 출원 명세서" },
+      { name: "비즈니스", icon: Briefcase, desc: "글로벌 IR 자료 및 사업 계획서 현지화" },
+      { name: "웹툰/웹소설", icon: PenTool, desc: "K-콘텐츠 글로벌 수출을 위한 창의적 현지화" },
     ],
   },
   {
     id: "life",
-    title: "생활분야 전문 번역",
-    subtitle: "일상 및 라이프스타일 콘텐츠",
+    title: "생활영역",
+    subtitle: "일상 및 라이프스타일 현지화 서비스",
     icon: Utensils,
     color: "#E91E63",
     items: [
-      { name: "요리/라이프", icon: ChefHat, desc: "글로벌 레시피 및 생활 가이드" },
-      { name: "재무/부동산", icon: Home, desc: "자산 관리 및 해외 계약서" },
-      { name: "입시/교육", icon: GraduationCap, desc: "유학 서류 및 교육 콘텐츠" },
-      { name: "사주/운세", icon: Sparkles, desc: "동서양 운세 콘텐츠 번역" },
+      { name: "요리/라이프", icon: ChefHat, desc: "다양한 글로벌 레시피 및 라이프스타일 가이드" },
+      { name: "재무/부동산", icon: Home, desc: "해외 투자 자료 및 자산/부동산 계약서" },
+      { name: "입시/교육", icon: GraduationCap, desc: "해외 유학 서류 및 전문 교육용 콘텐츠" },
+      { name: "사주/운세", icon: Sparkles, desc: "동서양 운세, 사주 등 문화적 맥락의 번역" },
+    ],
+  },
+  {
+    id: "specialized",
+    title: "전문영역",
+    subtitle: "고도의 학술 지식과 깊이가 요구되는 분야",
+    icon: Layers,
+    color: "#6B3FA0",
+    items: [
+      { name: "AI 고전 번역", icon: BookOpen, desc: "역사적 문헌 및 한문 텍스트의 현대어 복원" },
+      { name: "피지컬", icon: Dumbbell, desc: "스포츠 과학, 운동 생리학 등 신체 활동 전문 번역" },
+      { name: "학술/논문", icon: FileSearch, desc: "국제 학술지 투고 논문 및 대학 전문 교재" },
+      { name: "기사/뉴스", icon: Newspaper, desc: "글로벌 시사 뉴스 및 보도자료 신속 번역" },
+      { name: "의료/건강", icon: Stethoscope, desc: "의학 논문 및 의료 기기 등의 생명/건강 문서" },
     ],
   },
 ];
@@ -139,48 +106,6 @@ export function FieldsOverviewPage() {
         </div>
       </section>
 
-      {/* Type-based Classification */}
-      <section className="py-24 bg-white relative overflow-hidden">
-        <div className="max-w-7xl mx-auto px-6 relative z-10">
-          <div className="text-center mb-20">
-            <h2 className="text-3xl md:text-4xl font-black text-gray-900 mb-4 tracking-tight">서비스 유형별 구분</h2>
-            <p className="text-gray-500 font-bold">미디어 형태에 최적화된 하이브리드 번역 프로세스</p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6">
-            {translationTypes.map((type, i) => (
-              <motion.div
-                key={type.id}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.1 }}
-                className="bg-white rounded-[32px] p-8 border border-gray-100 shadow-sm hover:shadow-xl hover:border-purple-100 transition-all flex flex-col group"
-              >
-                <div 
-                  className="w-14 h-14 rounded-2xl flex items-center justify-center mb-6 shadow-lg shadow-gray-100 group-hover:scale-110 transition-transform"
-                  style={{ backgroundColor: type.color }}
-                >
-                  <type.icon className="w-7 h-7 text-white" />
-                </div>
-                <h3 className="text-lg font-black text-gray-900 mb-1">{type.title}</h3>
-                <p className="text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-4">{type.subtitle}</p>
-                <p className="text-xs text-gray-500 leading-relaxed mb-8 font-bold">{type.description}</p>
-                
-                <div className="mt-auto space-y-3">
-                  {type.features.map((feature, idx) => (
-                    <div key={idx} className="flex items-center gap-2">
-                      <Check className="w-3.5 h-3.5 text-[#4A1D96] shrink-0" />
-                      <span className="text-[11px] font-black text-gray-600">{feature}</span>
-                    </div>
-                  ))}
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* Industry Grid */}
       <section className="py-24">
         <div className="max-w-7xl mx-auto px-6">
@@ -193,6 +118,7 @@ export function FieldsOverviewPage() {
             {categories.map((cat, i) => (
               <motion.div
                 key={cat.id}
+                id={cat.id}
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
