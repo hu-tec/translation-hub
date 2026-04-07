@@ -28,9 +28,9 @@ const mainNavLinks = [
 ];
 
 const communityDropdown = [
-  { to: "/support#faq", label: "FAQ", icon: HelpCircle, color: "#4A1D96", desc: "자주 묻는 질문" },
-  { to: "/support#qna", label: "Q&A", icon: MessageCircle, color: "#2563EB", desc: "공개 게시판" },
-  { to: "/support#1on1", label: "1:1 문의", icon: MessageSquare, color: "#7C3AED", desc: "전문가 상담" },
+  { to: "/contact#faq", label: "FAQ", icon: HelpCircle, color: "#4A1D96", desc: "자주 묻는 질문" },
+  { to: "/contact#qna", label: "Q&A", icon: MessageCircle, color: "#2563EB", desc: "공개 게시판" },
+  { to: "/contact#1on1", label: "1:1 문의", icon: MessageSquare, color: "#7C3AED", desc: "전문가 상담" },
 ];
 
 export function Layout() {
@@ -153,14 +153,18 @@ export function Layout() {
             ))}
             
             {/* Community Dropdown (3-tier) */}
-            <div className="relative">
-              <button
-                onClick={() => setActiveDropdown(activeDropdown === "커뮤니티" ? null : "커뮤니티")}
+            <div 
+              className="relative"
+              onMouseEnter={() => setActiveDropdown("커뮤니티")}
+              onMouseLeave={() => setActiveDropdown(null)}
+            >
+              <Link
+                to="/contact"
                 className={`ml-3 bg-gray-900 text-white px-6 py-2.5 rounded-xl text-[13px] font-bold hover:bg-gray-800 transition-all shadow-lg flex items-center gap-2 cursor-pointer ${activeDropdown === "커뮤니티" ? "ring-2 ring-purple-500 ring-offset-2" : ""}`}
               >
                 커뮤니티
                 <ChevronDown className={`w-4 h-4 transition-transform ${activeDropdown === "커뮤니티" ? "rotate-180" : ""}`} />
-              </button>
+              </Link>
               {activeDropdown === "커뮤니티" && (
                 <div className="absolute top-full right-0 mt-3 w-[260px] bg-white rounded-[28px] shadow-[0_30px_70px_-15px_rgba(0,0,0,0.25)] border border-gray-100 py-4 px-3 z-50">
                    <div className="absolute -top-1.5 right-10 w-3 h-3 bg-white rotate-45 border-t border-l border-gray-100" />
