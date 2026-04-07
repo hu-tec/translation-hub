@@ -9,21 +9,55 @@ import {
 } from "lucide-react";
 import { Link } from "react-router";
 
-const categories = [
+const translationTypes = [
   {
     id: "stt",
-    title: "서비스 유형",
-    subtitle: "다양한 형태의 미디어 지원 로직",
-    icon: Zap,
+    title: "음성 → 텍스트 (STT)",
+    subtitle: "Speech to Text",
+    description: "음성을 인식해 텍스트로 변환하는 서비스",
     color: "#4A1D96",
-    items: [
-      { name: "STT (음성→텍스트)", icon: Mic, desc: "예능/드라마/유튜브 자막 및 녹음본 텍스트 변환" },
-      { name: "TTS (텍스트→음성)", icon: Volume2, desc: "오디오북, 홍보 영상, 방송 나레이션 생성" },
-      { name: "STS (음성→음성)", icon: Headphones, desc: "실시간 동시통역 및 다국어 음성 변환" },
-      { name: "문서 번역", icon: FileText, desc: "비즈니스, 사업 소개서, 원문 및 다국어 문서 번역" },
-      { name: "세부전문분야", icon: Search, desc: "특수한 산업과 환경에 맞춘 심화 전문 번역" },
-    ],
+    icon: Mic,
+    features: ["예능 / 드라마 / 영화", "SNS · 유튜브", "다큐 · 아나운서 방송", "관광 가이드 · 안내방송", "큐레이션"]
   },
+  {
+    id: "tts",
+    title: "텍스트 → 음성 (TTS)",
+    subtitle: "Text to Speech",
+    description: "텍스트를 자연스러운 음성으로 변환",
+    color: "#7C3AED",
+    icon: Volume2,
+    features: ["오디오북", "강의 · 음악", "홍보 영상", "방송 나레이션"]
+  },
+  {
+    id: "sts",
+    title: "음성 → 음성 (STS)",
+    subtitle: "Speech to Speech",
+    description: "실시간 다국어 음성 변환 서비스",
+    color: "#6B3FA0",
+    icon: Headphones,
+    features: ["동시통역", "다국어 강의", "외국어 노래/음악 변환", "인터뷰"]
+  },
+  {
+    id: "doc",
+    title: "문서 번역",
+    subtitle: "Document Translation",
+    description: "전문 문서를 다양한 언어로 번역",
+    color: "#1E293B",
+    icon: FileText,
+    features: ["원문 번역 · 고전 번역", "비즈니스 번역", "PPT 번역", "사업 소개서"]
+  },
+  {
+    id: "language",
+    title: "언어별 번역",
+    subtitle: "Language Specific",
+    description: "전 세계 주요 언어 및 희귀 언어 전문 번역",
+    color: "#4F46E5",
+    icon: Languages,
+    features: ["영어 · 일어 · 중국어", "유럽어권 · 동남아어권", "특수 언어 · 희귀 언어", "방언 현지화"]
+  }
+];
+
+const categories = [
   {
     id: "industry",
     title: "산업별",
@@ -102,6 +136,48 @@ export function FieldsOverviewPage() {
           </motion.div>
           <div className="absolute top-1/2 -right-20 -translate-y-1/2 w-1/2 h-[120%] opacity-[0.03] pointer-events-none rotate-12">
             <Languages className="w-full h-full text-[#4A1D96]" />
+          </div>
+        </div>
+      </section>
+
+      {/* Type-based Classification */}
+      <section className="py-24 bg-white relative overflow-hidden" id="stt">
+        <div className="max-w-7xl mx-auto px-6 relative z-10">
+          <div className="text-center mb-20">
+            <h2 className="text-3xl md:text-4xl font-black text-gray-900 mb-4 tracking-tight">서비스 유형별 구분</h2>
+            <p className="text-gray-500 font-bold">미디어 형태에 최적화된 하이브리드 번역 프로세스</p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6">
+            {translationTypes.map((type, i) => (
+              <motion.div
+                key={type.id}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.1 }}
+                className="bg-white rounded-[32px] p-8 border border-gray-100 shadow-sm hover:shadow-xl hover:border-purple-100 transition-all flex flex-col group"
+              >
+                <div 
+                  className="w-14 h-14 rounded-2xl flex items-center justify-center mb-6 shadow-lg shadow-gray-100 group-hover:scale-110 transition-transform"
+                  style={{ backgroundColor: type.color }}
+                >
+                  <type.icon className="w-7 h-7 text-white" />
+                </div>
+                <h3 className="text-lg font-black text-gray-900 mb-1">{type.title}</h3>
+                <p className="text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-4">{type.subtitle}</p>
+                <p className="text-xs text-gray-500 leading-relaxed mb-8 font-bold">{type.description}</p>
+                
+                <div className="mt-auto space-y-3">
+                  {type.features.map((feature, idx) => (
+                    <div key={idx} className="flex items-center gap-2">
+                      <Check className="w-3.5 h-3.5 text-[#4A1D96] shrink-0" />
+                      <span className="text-[11px] font-black text-gray-600">{feature}</span>
+                    </div>
+                  ))}
+                </div>
+              </motion.div>
+            ))}
           </div>
         </div>
       </section>
