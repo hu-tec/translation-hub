@@ -4,6 +4,8 @@ on:
   push:
     branches: ["main", "master"]
   workflow_dispatch:
+  repository_dispatch:
+    types: [classic-translation-updated]
 
 permissions:
   contents: read
@@ -18,18 +20,36 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: Checkout translation-hub
         uses: actions/checkout@v4
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: "20"
-      - name: Install dependencies
+      - name: Install dependencies (translation-hub)
         run: npm install
-      - name: Build with Vite
+      - name: Build translation-hub
         run: npm run build
       - name: Create 404.html for SPA routing
         run: cp dist/index.html dist/404.html
+
+      - name: Checkout classic-translation
+        uses: actions/checkout@v4
+        with:
+          repository: hu-tec/classic-translation
+          path: classic-translation
+      - name: Install dependencies (classic-translation)
+        working-directory: classic-translation
+        run: npm install
+      - name: Build classic-translation
+        working-directory: classic-translation
+        run: npm run build
+      - name: Copy classic-translation dist into subfolder
+        run: |
+          mkdir -p dist/classic-translation
+          cp -r classic-translation/dist/. dist/classic-translation/
+          cp dist/classic-translation/index.html dist/classic-translation/404.html
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
