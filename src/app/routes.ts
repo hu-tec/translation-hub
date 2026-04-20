@@ -80,4 +80,4 @@ export const router = createBrowserRouter([
       },
     ],
   },
-], { basename: '/translation-hub/' });
+], { basename: import.meta.env.BASE_URL });
