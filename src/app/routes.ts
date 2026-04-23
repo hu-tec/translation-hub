@@ -5,7 +5,7 @@ import { ClassicTranslation } from "./components/ClassicTranslation";
 import { PhysicalTranslation } from "./components/PhysicalTranslation";
 import { IndustryTranslation } from "./components/IndustryTranslation";
 import { SupportPage } from "./components/SupportPage";
-import { AboutPage } from "./components/AboutPage";
+
 import { FieldsOverviewPage } from "./components/FieldsOverviewPage";
 import { ExpertsInfoPage } from "./components/ExpertsInfoPage";
 import { PortfolioPage } from "./components/PortfolioPage";
@@ -22,10 +22,7 @@ export const router = createBrowserRouter([
         index: true,
         Component: HomePage,
       },
-      {
-        path: "about",
-        Component: AboutPage,
-      },
+
       {
         path: "fields",
         Component: FieldsOverviewPage,

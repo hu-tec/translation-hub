@@ -191,16 +191,14 @@ export function Layout() {
             </div>
 
             {/* Group About */}
-            <Link
-              to="/about"
-              className={`ml-1 px-4 py-2.5 rounded-xl transition-all text-[14px] ${
-                location.pathname === "/about"
-                  ? "bg-[#4A1D96] text-white shadow-lg shadow-purple-100 font-bold"
-                  : "text-gray-600 hover:text-[#4A1D96] hover:bg-purple-50 font-semibold"
-              }`}
+            <a
+              href="https://hutechc.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="ml-1 px-4 py-2.5 rounded-xl transition-all text-[14px] text-gray-600 hover:text-[#4A1D96] hover:bg-purple-50 font-semibold"
             >
               그룹 소개
-            </Link>
+            </a>
           </nav>
 
           {/* Mobile menu button */}
@@ -268,17 +266,15 @@ export function Layout() {
                </div>
             </div>
             <div className="py-2 px-2">
-              <Link
-                to="/about"
-                className={`block p-4 rounded-2xl transition-all ${
-                  location.pathname === "/about"
-                    ? "bg-[#4A1D96] text-white font-bold"
-                    : "text-gray-600 hover:bg-purple-50 font-semibold"
-                }`}
+              <a
+                href="https://hutechc.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block p-4 rounded-2xl transition-all text-gray-600 hover:bg-purple-50 font-semibold"
                 onClick={() => setMobileOpen(false)}
               >
                 그룹 소개
-              </Link>
+              </a>
             </div>
           </nav>
         )}
@@ -326,7 +322,7 @@ export function Layout() {
               <h4 className="text-white font-black mb-8 text-lg">바로가기</h4>
               <ul className="space-y-4 text-sm font-bold">
                 <li><Link to="/" className="hover:text-white transition-colors">AI 신사업</Link></li>
-                <li><Link to="/about" className="hover:text-white transition-colors">30년 정통사업</Link></li>
+                <li><a href="https://hutechc.com/" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">30년 정통사업</a></li>
                 <li><Link to="/" className="hover:text-white transition-colors">사회 공헌</Link></li>
                 <li><Link to="/portfolio" className="hover:text-white transition-colors">파트너십 및 인증</Link></li>
                 <li><Link to="/" className="hover:text-white transition-colors">언론 보도</Link></li>
